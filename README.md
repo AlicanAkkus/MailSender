@@ -4,11 +4,11 @@ How to use?
 
 For single mail;
 ```java
-    Document document = XmlUtils.loadXmlFromFile("distsrc/config/MailSender.xml");
+    Document document = XmlUtils.loadXmlFromFile("distsrc/config/MailSender.xml");//load configuration file
 
-		MailSender mailSender = MailFactory.mailFactory(document);
+		MailSender mailSender = MailFactory.mailFactory(document);//create mail sender by MailFactory
 		
-		MailMessageBean mailMessageBean = new MailMessageBean();
+		MailMessageBean mailMessageBean = new MailMessageBean();//simple mail bean
 		mailMessageBean.
 			setFrom("alican.akkus@32bit.com.tr").
 			setFromName("alican akkus").
@@ -16,7 +16,7 @@ For single mail;
 			setContent("test data!!!!!").
 			setTo("alican.akkus@32bit.com.tr");
 			
-			mailSender.sendMail(mailMessageBean);
+			mailSender.sendMail(mailMessageBean);//send mail
 ```	
 
 For multiple mails;
@@ -33,7 +33,7 @@ For multiple mails;
 			setContent("test data!!!!!").
 			setTo("alican.akkus@32bit.com.tr");
 		
-		ArrayList<MailMessageBean> mailList = new ArrayList<MailMessageBean>();
+		ArrayList<MailMessageBean> mailList = new ArrayList<MailMessageBean>();//you can send more than one mail at same time with mail sender 
 		mailList.add(mailMessageBean);
 		mailList.add(mailMessageBean);
 		mailList.add(mailMessageBean);
