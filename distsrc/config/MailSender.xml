@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mailsender>
 
-	<SMTPDebugs>true</SMTPDebugs>
-	<SMTPHost>10.2.41.45</SMTPHost>
+	<SMTPDebug>true</SMTPDebug>
+	<SMTPHost>your/smtp/host</SMTPHost>
 	<SMTPAuth>false</SMTPAuth>
 	<SMTPUsername>test</SMTPUsername>
 	<SMTPPassword>test</SMTPPassword>

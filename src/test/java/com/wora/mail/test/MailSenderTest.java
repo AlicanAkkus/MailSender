@@ -2,6 +2,8 @@ package com.wora.mail.test;
 
 import java.util.ArrayList;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.w3c.dom.Document;
 
 import com.wora.bean.MailMessageBean;
@@ -11,27 +13,33 @@ import com.wora.util.XmlUtils;
 
 public class MailSenderTest {
 
-	public static void main(String[] args) throws Exception {
+	Document config = null;
 
-		Document document = XmlUtils.loadXmlFromFile("distsrc/config/MailSender.xml");
+	@Before
+	public void loadConfig() {
+		config = XmlUtils.loadXmlFromFile("distsrc/config/MailSender.xml");
+	}
 
-		MailSender mailSender = MailFactory.mailFactory(document);
-		
-		MailMessageBean mailMessageBean = new MailMessageBean();
-		mailMessageBean.
-			setFrom("alican.akkus@32bit.com.tr").
-			setFromName("alican akkus").
-			setSubject("Test").
-			setContent("test data!!!!!").
-			setTo("alican.akkus@32bit.com.tr");
-		
-		ArrayList<MailMessageBean> mailList = new ArrayList<MailMessageBean>();
-		mailList.add(mailMessageBean);
-		mailList.add(mailMessageBean);
-		mailList.add(mailMessageBean);
-		mailList.add(mailMessageBean);
-		
-		mailSender.sendMail(mailList, 1000);
+	@Test
+	public void sendMail() {
+		MailSender mailSender;
+		try {
+			mailSender = MailFactory.mailFactory(config);
+
+			MailMessageBean mailMessageBean = new MailMessageBean();
+			mailMessageBean.setFrom("alican.akkus@32bit.com.tr").setFromName("alican akkus").setSubject("Test").setContent("<h1>test data!!!!!</h1>")
+					.setTo("alican.akkus@32bit.com.tr");
+
+			ArrayList<MailMessageBean> mailList = new ArrayList<MailMessageBean>();
+			mailList.add(mailMessageBean);
+			mailList.add(mailMessageBean);
+			mailList.add(mailMessageBean);
+			mailList.add(mailMessageBean);
+
+			mailSender.sendMail(mailList, 1000);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 

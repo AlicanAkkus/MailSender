@@ -16,7 +16,7 @@ public class ConfigurationUtils {
 		if (configuration instanceof Document) {
 			return extractXmlConfiguration((Document) configuration);
 		} else if (configuration instanceof Properties) {
-			return extractXmlConfiguration((Properties) configuration);
+			return extractPropertiesConfiguration((Properties) configuration);
 		}
 
 		return null;
@@ -33,7 +33,7 @@ public class ConfigurationUtils {
 		// <SMTPPassword>test</SMTPPassword>
 		// <SendInterval>60</SendInterval>
 
-		Element smtpDebugElement = XmlUtils.findElement(mailNode, "SMTP");
+		Element smtpDebugElement = XmlUtils.findElement(mailNode, "SMTPDebug");
 		Element smtpHostElement = XmlUtils.findElement(mailNode, "SMTPHost");
 		Element smtpAuthElement = XmlUtils.findElement(mailNode, "SMTPAuth");
 		Element smtpUsernameElement = XmlUtils.findElement(mailNode, "SMTPUsername");
@@ -77,7 +77,7 @@ public class ConfigurationUtils {
 
 	}
 
-	private static ConfigurationBean extractXmlConfiguration(Properties configuration) throws Exception {
+	private static ConfigurationBean extractPropertiesConfiguration(Properties configuration) throws Exception {
 		ConfigurationBean config = new ConfigurationBean();
 
 		// mail.sender.SMTPDebug = true

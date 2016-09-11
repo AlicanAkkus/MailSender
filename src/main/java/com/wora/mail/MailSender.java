@@ -9,7 +9,6 @@ import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
@@ -26,9 +25,7 @@ public class MailSender {
 	ConfigurationBean config = null;
 
 	public MailSender(Document xmlConfiguration) throws Exception {
-
 		this.config = ConfigurationUtils.extractConfigurations(xmlConfiguration);
-
 	}
 
 	public MailSender(Properties propsConfiguration) throws Exception {
@@ -52,9 +49,7 @@ public class MailSender {
 			// logger.debug(logString.toString());
 			// }
 			
-			String from = mailMessage.getFrom().substring(0, mailMessage.getFrom().lastIndexOf(","));
 			Properties props = new Properties();
-			InternetAddress addressFrom = new InternetAddress();
 			MimeBodyPart messageBodyPart = new MimeBodyPart();
 			Multipart multipart = new MimeMultipart();
 			MimeMessage msg = null;
@@ -83,22 +78,29 @@ public class MailSender {
 				msg.setSubject(mailMessage.getSubject(), mailMessage.getEncoding());
 			}
 
-//			addressFrom.setAddress(from.toString());
-//			addressFrom.setPersonal(mailMessage.getFromName(), mailMessage.getEncoding());
-//			msg.setFrom(addressFrom);
-
-			if (StringUtils.isNotBlank(mailMessage.getTo())) {
-				String to = mailMessage.getTo().substring(0, mailMessage.getTo().lastIndexOf(","));
-				msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+			if (mailMessage.getTo().size() > 0) {
+				StringBuilder toAddress = new StringBuilder();
+				
+				for(String to : mailMessage.getTo()){
+					toAddress.append(to).append(",");
+				}
+				toAddress.replace(toAddress.lastIndexOf(","), toAddress.length(), "");
+				msg.setRecipients(Message.RecipientType.TO, toAddress.toString());
 			}
-			if (StringUtils.isNotBlank(mailMessage.getCc())) {
-				String cc = mailMessage.getTo().substring(0, mailMessage.getCc().lastIndexOf(","));
-				msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(cc));
+			
+			if (mailMessage.getCc().size() > 0) {
+				StringBuilder ccAddress = new StringBuilder();
+				
+				for(String cc : mailMessage.getCc()){
+					ccAddress.append(cc).append(",");
+				}
+				ccAddress.replace(ccAddress.lastIndexOf(","), ccAddress.length(), "");
+				msg.setRecipients(Message.RecipientType.CC, ccAddress.toString());
 			}
 
 			if (StringUtils.isNotBlank(mailMessage.getContent())) {
 				messageBodyPart.setContent(mailMessage.getContent(), mailMessage.getContentType());
-				messageBodyPart.addHeader("Content-Type", "text/html; charset= " + mailMessage.getEncoding());
+				messageBodyPart.addHeader("Content-Type", mailMessage.getContentType() + "; " +"charset= " + mailMessage.getEncoding());
 				multipart.addBodyPart(messageBodyPart);
 			}
 			msg.setContent(multipart);
@@ -127,3 +129,4 @@ public class MailSender {
 	}
 
 }
+ 
